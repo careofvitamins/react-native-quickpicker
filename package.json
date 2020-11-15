@@ -1,14 +1,13 @@
 {
   "name": "quick-picker",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "A plug and Play picker for React Native",
   "author": "Vincent de Lafontaine",
   "private": false,
   "scripts": {
     "lint": "tslint --config tslint.json --project tsconfig.json",
     "prettier": "prettier --write './src/**/*'",
-    "build": "rm -rf dist && tsc -b",
-    "postinstall": "yarn build"
+    "build": "rm -rf dist && tsc -p ./"
   },
   "main": "dist/QuickPicker.js",
   "repository": {
