@@ -3,13 +3,20 @@
     "declaration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "jsx": "react",
-    "lib": ["dom", "es2015", "es2016"],
-    "module": "es2015",
+    "jsx": "react-native",
+    "lib": ["esnext", "dom"],
+    "module": "esnext",
     "moduleResolution": "node",
     "outDir": "dist",
     "skipLibCheck": true,
     "strict": true,
-    "target": "es5"
-  }
+    "target": "esnext",
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "exclude": [
+    "src/App.tsx",
+    "dist/**/*"
+  ]
 }
