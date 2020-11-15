@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { View, Animated, StyleSheet, Platform } from 'react-native';
 import Touchable from '@appandflow/touchable';
 import pickerStore, {
@@ -54,7 +54,7 @@ export default class QuickPicker extends React.Component {
     Animated.timing(this.state.opacity, {
       toValue: 0.4,
       duration: ANIMATION_DURATION,
-      useNativeDriver: pickerStore.pickerOptions.useNativeDriver,
+      useNativeDriver: pickerStore.pickerOptions.useNativeDriver || false,
     }).start();
   };
 
@@ -62,7 +62,7 @@ export default class QuickPicker extends React.Component {
     Animated.timing(this.state.opacity, {
       toValue: 0,
       duration: ANIMATION_DURATION,
-      useNativeDriver: pickerStore.pickerOptions.useNativeDriver,
+      useNativeDriver: pickerStore.pickerOptions.useNativeDriver || false,
     }).start();
   };
 
@@ -122,7 +122,6 @@ export default class QuickPicker extends React.Component {
       <View
         style={{
           flex: 1,
-          position: 'absolute',
           ...StyleSheet.absoluteFillObject,
         }}
       >

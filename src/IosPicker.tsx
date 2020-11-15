@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { View, Animated, Platform, Text, Picker } from 'react-native';
+import { View, Animated, Platform, Text } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Touchable from '@appandflow/touchable';
 import pickerStore, { ANIMATION_DURATION } from './PickerStore';
@@ -19,13 +20,15 @@ interface P {
 }
 
 export default class IosPicker extends React.Component<P> {
+  height: number = 0;
+
   state = {
     isOpen: false,
     deltaY: new Animated.Value(0),
     value: pickerStore.pickerOptions.item
       ? pickerStore.pickerOptions.item.value
       : pickerStore.pickerOptions.items
-      ? pickerStore.pickerOptions.items[0]
+      ? pickerStore.pickerOptions.items[0].value
       : undefined,
   };
 
@@ -38,9 +41,9 @@ export default class IosPicker extends React.Component<P> {
       return null;
     }
     Animated.timing(this.state.deltaY, {
-      toValue: -HEIGHT,
+      toValue: -this._getHeight(),
       duration: ANIMATION_DURATION,
-      useNativeDriver: pickerStore.pickerOptions.useNativeDriver,
+      useNativeDriver: pickerStore.pickerOptions.useNativeDriver || false,
     }).start();
   };
 
@@ -51,9 +54,11 @@ export default class IosPicker extends React.Component<P> {
     Animated.timing(this.state.deltaY, {
       toValue: 0,
       duration: ANIMATION_DURATION,
-      useNativeDriver: pickerStore.pickerOptions.useNativeDriver,
+      useNativeDriver: pickerStore.pickerOptions.useNativeDriver || false,
     }).start();
   };
+
+  _getHeight = () => HEIGHT + pickerStore.pickerOptions.screenInsets.bottom;
 
   _renderPickerBasedOnType = () => {
     const { pickerOptions } = pickerStore;
@@ -63,8 +68,8 @@ export default class IosPicker extends React.Component<P> {
     return (
       <View
         style={[
-          { backgroundColor: BACKGROUND_COLOR, height: HEIGHT - BORDERHEIGHT },
-          pickerOptions.disableTopRow ? { height: HEIGHT } : {},
+          { backgroundColor: BACKGROUND_COLOR, height: this._getHeight() - BORDERHEIGHT },
+          pickerOptions.disableTopRow ? { height: this._getHeight() } : {},
         ]}
       >
         {pickerOptions.pickerType === 'normal' ? (
@@ -114,75 +119,75 @@ export default class IosPicker extends React.Component<P> {
   };
 
   render() {
-    const { pickerOptions } = pickerStore;
     if (Platform.OS !== 'ios') {
       return null;
     }
 
+    const { pickerOptions } = pickerStore;
     const doneButtonText = pickerOptions.doneButtonText || 'Done';
 
     return (
-      <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            bottom: 0 - HEIGHT,
-            right: 0,
-            left: 0,
-            height: HEIGHT,
-            borderTopWidth: 1,
-            borderColor: 'lightgray',
-            transform: [
-              {
-                translateY: this.state.deltaY,
-              },
-            ],
-          },
-        ]}
-      >
-        <View
-          style={{
-            height: pickerOptions.disableTopRow ? 0 : BORDERHEIGHT,
-            backgroundColor: TOP_BACKGROUND_COLOR,
-          }}
-        >
-          {pickerOptions.topRow ? (
-            pickerOptions.topRow
-          ) : (
-            <View
-              style={[
+        <Animated.View
+          style={[
+            {
+              position: 'absolute',
+              bottom: 0 - this._getHeight(),
+              right: 0,
+              left: 0,
+              height: this._getHeight(),
+              borderTopWidth: 1,
+              borderColor: 'lightgray',
+              transform: [
                 {
-                  height: BORDERHEIGHT,
-                  paddingHorizontal: 17,
-                  justifyContent: 'center',
-                  alignItems: 'flex-end',
-                  borderBottomWidth: 1,
-                  borderColor: 'lightgray',
+                  translateY: this.state.deltaY,
                 },
-                pickerOptions.disableTopRow ? { height: 0 } : {},
-              ]}
-            >
-              <Touchable feedback="opacity" onPress={this.props.onPressDone}>
-                <Text
-                  style={[
-                    {
-                      fontWeight: '600',
-                      fontSize: 20,
-                      color: iOS_BLUE,
-                    },
-                    pickerOptions.doneButtonTextStyle
-                      ? { ...pickerOptions.doneButtonTextStyle }
-                      : {},
-                  ]}
-                >
-                  {doneButtonText}
-                </Text>
-              </Touchable>
-            </View>
-          )}
-        </View>
-        {this._renderPickerBasedOnType()}
-      </Animated.View>
+              ],
+            },
+          ]}
+        >
+          <View
+            style={{
+              height: pickerOptions.disableTopRow ? 0 : BORDERHEIGHT,
+              backgroundColor: TOP_BACKGROUND_COLOR,
+            }}
+          >
+            {pickerOptions.topRow ? (
+              pickerOptions.topRow
+            ) : (
+              <View
+                style={[
+                  {
+                    height: BORDERHEIGHT,
+                    paddingHorizontal: 17,
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                    borderBottomWidth: 1,
+                    borderColor: 'lightgray',
+                  },
+                  pickerOptions.disableTopRow ? { height: 0 } : {},
+                ]}
+              >
+                <Touchable feedback="opacity" onPress={this.props.onPressDone}>
+                  <Text
+                    style={[
+                      {
+                        fontWeight: '600',
+                        fontSize: 20,
+                        color: iOS_BLUE,
+                      },
+                      pickerOptions.doneButtonTextStyle
+                        ? { ...pickerOptions.doneButtonTextStyle }
+                        : {},
+                    ]}
+                  >
+                    {doneButtonText}
+                  </Text>
+                </Touchable>
+              </View>
+            )}
+          </View>
+          {this._renderPickerBasedOnType()}
+        </Animated.View>
     );
   }
 }

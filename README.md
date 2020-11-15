@@ -143,6 +143,7 @@ Closes the picker.
 | is24Hour                 | boolean                                                  | undefined                   | Android      | Allows changing of the time picker to a 24 hour format.                                        |
 | minuteInterval           | 1 \| 2 \| 6 \| 5 \| 4 \| 3 \| 10 \| 12 \| 15 \| 20 \| 30 | undefined                   | iOS          | The interval at which minutes can be selected.                                                 |
 | useNativeDriver          | boolean                                                  | true                        | both         | Use native driver                                                                              |
+| screenInsets             | { top?: number, bottom: number, left?: number, right?: number } |  0                    | iOS         | Safe area insets
 
 #### Item
 

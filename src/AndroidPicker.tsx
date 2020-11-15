@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { View, Animated, Text, StyleSheet, FlatList } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -33,12 +33,12 @@ export default class AndroidPicker extends React.Component<P> {
     Animated.timing(this.state.opacity, {
       toValue: 0.4,
       duration: ANIMATION_DURATION,
-      useNativeDriver: pickerStore.pickerOptions.useNativeDriver,
+      useNativeDriver: pickerStore.pickerOptions.useNativeDriver || false,
     }).start();
     Animated.timing(this.state.windowOpacity, {
       toValue: 1,
       duration: ANIMATION_DURATION,
-      useNativeDriver: pickerStore.pickerOptions.useNativeDriver,
+      useNativeDriver: pickerStore.pickerOptions.useNativeDriver || false,
     }).start();
   };
 
@@ -46,12 +46,12 @@ export default class AndroidPicker extends React.Component<P> {
     Animated.timing(this.state.opacity, {
       toValue: 0,
       duration: ANIMATION_DURATION,
-      useNativeDriver: pickerStore.pickerOptions.useNativeDriver,
+      useNativeDriver: pickerStore.pickerOptions.useNativeDriver || false,
     }).start();
     Animated.timing(this.state.windowOpacity, {
       toValue: 0,
       duration: ANIMATION_DURATION,
-      useNativeDriver: pickerStore.pickerOptions.useNativeDriver,
+      useNativeDriver: pickerStore.pickerOptions.useNativeDriver || false,
     }).start();
   };
 
@@ -69,7 +69,6 @@ export default class AndroidPicker extends React.Component<P> {
       <View
         style={{
           flex: 1,
-          position: 'absolute',
           justifyContent: 'center',
           alignItems: 'center',
           paddingHorizontal: '10%',
@@ -81,7 +80,6 @@ export default class AndroidPicker extends React.Component<P> {
           native={false}
           style={{
             flex: 1,
-            position: 'absolute',
             ...StyleSheet.absoluteFillObject,
           }}
           onPress={pickerOptions.onTapOut || this.props.onCancel}

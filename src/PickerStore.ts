@@ -46,6 +46,8 @@ export interface PickerOptions {
   androidItemTextStyle?: StyleProp<TextStyle>;
   androidSelectedItemStyle?: StyleProp<ViewStyle>;
   useNativeDriver?: boolean;
+
+  screenInsets: { top?: number, bottom: number, left?: number, right?: number }
 }
 
 const initialPickerOptions: PickerOptions = {
@@ -78,12 +80,14 @@ const initialPickerOptions: PickerOptions = {
   androidSelectedItemStyle: undefined,
 
   useNativeDriver: true,
+
+  screenInsets: { top: 0, right: 0, bottom: 0, left: 0 }
 };
 
 const pickerStore: PickerStore = {
   isOpen: false,
   pickerComponent: null,
-  pickerOptions: { ...initialPickerOptions },
+  pickerOptions: { ...initialPickerOptions, useNativeDriver: true },
   open: (pickerOptions: PickerOptions) => {
     if (pickerStore.pickerComponent) {
       pickerStore.pickerComponent._open();
