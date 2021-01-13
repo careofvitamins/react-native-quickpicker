@@ -44,6 +44,7 @@ export interface PickerOptions {
   androidModalStyle?: StyleProp<ViewStyle>;
   androidItemStyle?: StyleProp<ViewStyle>;
   androidItemTextStyle?: StyleProp<TextStyle>;
+  androidSelectedItemTextStyle?: StyleProp<TextStyle>;
   androidSelectedItemStyle?: StyleProp<ViewStyle>;
   useNativeDriver?: boolean;
 

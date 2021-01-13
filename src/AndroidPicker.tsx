@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Animated, Text, StyleSheet, FlatList } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 import Touchable from '@appandflow/touchable';
 import pickerStore, { ANIMATION_DURATION, Item } from './PickerStore';
 
@@ -98,8 +97,7 @@ export default class AndroidPicker extends React.Component<P> {
           style={[
             {
               backgroundColor: 'rgb(250,250,250)',
-              padding: 20,
-              minHeight: 270,
+              minHeight: Math.min(pickerOptions.items ? pickerOptions.items.length * 78 : 0, 270),
               width: '100%',
               borderRadius: 3,
               opacity: this.state.windowOpacity,
@@ -110,7 +108,6 @@ export default class AndroidPicker extends React.Component<P> {
               },
               shadowOpacity: 0.25,
               shadowRadius: 3.84,
-
               elevation: 5,
             },
             pickerOptions.androidModalStyle
@@ -126,6 +123,7 @@ export default class AndroidPicker extends React.Component<P> {
                 style={pickerOptions.androidItemStyle}
                 textStyle={pickerOptions.androidItemTextStyle}
                 selectedStyle={pickerOptions.androidSelectedItemStyle}
+                selectedTextStyle={pickerOptions.androidSelectedItemTextStyle}
                 onPress={() => this.setState({ item })}
                 label={item.label}
                 selected={
@@ -136,15 +134,16 @@ export default class AndroidPicker extends React.Component<P> {
             )}
             keyExtractor={item => String(item.value)}
           />
-          <View style={{ alignSelf: 'flex-end', flexDirection: 'row' }}>
+          <View style={{ alignSelf: 'flex-end', flexDirection: 'row', paddingRight: 20, paddingBottom: 10 }}>
             <AndroidButtonText
               text={cancelButtonText}
               onPress={pickerOptions.onTapOut || this.props.onCancel}
-              style={{ marginRight: 30 }}
+              textStyle={pickerOptions.doneButtonTextStyle}
             />
             <AndroidButtonText
               text={doneButtonText}
               onPress={() => this.props.onChange(this.state.item)}
+              textStyle={pickerOptions.doneButtonTextStyle}
             />
           </View>
         </Animated.View>
@@ -172,12 +171,12 @@ export default class AndroidPicker extends React.Component<P> {
 const AndroidButtonText = ({
   text,
   onPress,
-  style,
+  textStyle,
   containerStyle,
 }: {
   text: string;
   onPress: any;
-  style?: any;
+  textStyle?: any;
   containerStyle?: any;
 }) => (
   <Touchable
@@ -185,16 +184,22 @@ const AndroidButtonText = ({
     native={false}
     onPress={onPress}
     hitslop={{ top: 20, left: 20, right: 20, bottom: 20 }}
-    style={containerStyle}
+    style={[{
+      paddingHorizontal: 10,
+      paddingVertical: 10,
+      minWidth: 60,
+    }, containerStyle]}
   >
     <Text
       style={[
         {
           color: ANDROID_SECONDARY_VARIANT,
-          fontSize: 17,
+          fontSize: 15,
           fontWeight: '400',
+          textTransform: 'uppercase',
+          textAlign: 'center'
         },
-        style,
+        textStyle,
       ]}
     >
       {text}
@@ -209,6 +214,7 @@ const RowItem = ({
   style = {},
   textStyle = {},
   selectedStyle = {},
+  selectedTextStyle = {}
 }: {
   label: string;
   selected?: boolean;
@@ -216,28 +222,31 @@ const RowItem = ({
   style?: any;
   textStyle?: any;
   selectedStyle?: any;
+  selectedTextStyle?: any;
 }) => (
   <AndroidButtonText
     text={label}
-    style={{
+    textStyle={[{
       color: selected ? ANDROID_SECONDARY_VARIANT : '#616161',
+      fontSize: 17,
+      fontWeight: '400',
+      textAlign: 'left',
+      textTransform: 'none',
       ...textStyle,
-    }}
+    }, selected && selectedTextStyle]}
     onPress={onPress}
     containerStyle={
       selected
         ? {
-            marginBottom: 15,
-            height: 35,
             justifyContent: 'center',
+            paddingHorizontal: 20,
             minWidth: 40,
             ...style,
             ...selectedStyle,
           }
         : {
-            marginBottom: 15,
-            height: 35,
             justifyContent: 'center',
+            paddingHorizontal: 20,
             minWidth: 40,
             ...style,
           }
